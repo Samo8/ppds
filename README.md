@@ -2,6 +2,8 @@
 
 ## First assignment focused on threads
 
+### Runs on Python 3.8.0
+
 ##### We have 3 uses of mutex lock, each is in separate main{number}.py file
 
 ##### main.py
