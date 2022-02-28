@@ -2,6 +2,10 @@ from fei.ppds import Thread, Mutex, Event, print
 
 
 class SimpleBarrier:
+    """class representing barrier, which has number of threads,
+    counter, mutex and event as params.
+
+    """
     def __init__(self, N):
         self.N = N
         self.C = 0

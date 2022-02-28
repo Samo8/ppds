@@ -36,6 +36,11 @@ def compute_fibonacci(adt, i):
 
 
 def main():
+    """create {THREADS} threads and call compute_fibonacci for {THREADS} times.
+    Prints computed fibonacci sequence to console.
+
+    :return: None
+    """
     THREADS = 10
     adt = Adt(THREADS)
     threads = [Thread(compute_fibonacci, adt, i) for i in range(THREADS)]
