@@ -17,10 +17,13 @@ By using semaphores and LS we make sure that there can't be consumed more items 
 In plot_graph() function we plot results as 3d graph. x-axis represents consumption/production time.
 This means time for which sleep() si called with. Lower the time, more items are produced/consumed.
 Y-axis represents number of consumers and z-axis represents number of items consumed per second.
-This function was heavily inspired by last year assignment shown at https://www.youtube.com/watch?v=vI_DA3WiijI&t.
+This function was heavily inspired by last year assignment shown [at](https://www.youtube.com/watch?v=vI_DA3WiijI&t).
 In the main() function we cycle 100 times, in each cycle we count sleep_time based in index in iteration.
 Also, we create different number of consumers from 1 to 10. Number of producers is set to 10 all the time.
 After finishing all iteration we plot the result.
 We can see result graph bellow:
 
 ![Result graph](./result_graph.png "P-C problem")
+
+We can see that, with increasing number of consumer and decreasing time (less time means more consumed
+in iteration), also number of consumed number per seconds increases.
