@@ -143,7 +143,7 @@ def main():
 
             sleep(4)
             shared.finished = True
-            print(f'Hlavne vlakno:{i} caka')
+            print(f'Main thread:{i} waiting')
             shared.items.signal(100)
             shared.free.signal(100)
             [t.join() for t in c + p]
@@ -155,7 +155,7 @@ def main():
                            consumers_number,
                            consumed_items_per_second))
 
-            print(f'Hlavne vlakno:{i} koniec')
+            print(f'Main thread:{i} done')
 
     plot_graph(result)
 
