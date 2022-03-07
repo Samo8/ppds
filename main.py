@@ -133,10 +133,10 @@ def plot_graph(res):
 def main():
     result = []
     for i in range(1, 10):
+        sleep_time = i / 25
         for consumers_number in range(1, 10):
             shared = Shared(10)
 
-            sleep_time = i / 25
             p = [Thread(producer, shared, sleep_time) for _ in range(10)]
             c = [Thread(consumer, shared, sleep_time)
                  for _ in range(consumers_number)]
