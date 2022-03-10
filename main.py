@@ -1,93 +1,117 @@
-from cv2 import trace
+"""
+Author: Samuel Dubovec
+
+@Copyright Matus Jokay
+Implementation taken from pseudo code
+"""
 from fei.ppds import Mutex, Thread, Semaphore, Event, print
 from time import sleep
 from random import randint
 
 
 class LS(object):
-	"""class representing Lightswitch object
-	we have counter and simple mutex here"""
-	def __init__(self):
-		self.cnt = 0
-		self.mutex = Mutex()
-		
-	def lock(self, sem):
-		"""function used to lock.
-		:param sem: Semaphore which wait() is called on
-		:return: None
-		"""
-		self.mutex.lock()
-		self.cnt += 1
-		if self.cnt == 1:
-			sem.wait()
-		self.mutex.unlock()		
-		return self.cnt
+    """class representing Lightswitch object
+    we have counter and simple mutex here"""
 
-	def unlock(self, sem):
-		"""function used to unlock.
-		:param sem: Semaphore which signal() is called on
-		:return: None
-		"""
-		self.mutex.lock()
-		self.cnt -= 1
-		if self.cnt == 0:
-			sem.signal()
-		self.mutex.unlock()
+    def __init__(self):
+        self.cnt = 0
+        self.mutex = Mutex()
+
+    def lock(self, sem):
+        """function used to lock.
+        :param sem: Semaphore which wait() is called on
+        :return: None
+        """
+        self.mutex.lock()
+        self.cnt += 1
+        if self.cnt == 1:
+            sem.wait()
+        self.mutex.unlock()
+        return self.cnt
+
+    def unlock(self, sem):
+        """function used to unlock.
+        :param sem: Semaphore which signal() is called on
+        :return: None
+        """
+        self.mutex.lock()
+        self.cnt -= 1
+        if self.cnt == 0:
+            sem.signal()
+        self.mutex.unlock()
 
 
 class Shared:
-	def __init__(self):
-		self.accessData = Semaphore(1)
-		self.turniket = Semaphore(1)
-		self.ls_monitor = LS()
-		self.ls_cidlo = LS()
-		self.validData = Event()
+    """class representing Lightswitch object
+       we have counter and simple mutex here
+       """
+
+    def __init__(self):
+        self.access_data = Semaphore(1)
+        self.turnstile = Semaphore(1)
+        self.ls_monitor = LS()
+        self.ls_sensor = LS()
+        self.valid_data = Event()
 
 
 def monitor(shared, monitor_id):
-	# monitor nemôže pracovať, kým nie je aspoň 1 platný údaj v úložisku
-	# # shared.validData.wait()
-	while True:
-		# monitor má prestávku 500 ms od zapnutia alebo poslednej aktualizácie
-		sleep(0.5)
-		# zablokujeme turniket, aby sme vyhodili čidlá z KO
-		shared.turniket.wait()
-		# získame prístup k úložisku
-		pocet_citajucich_monitorov = shared.ls_monitor.lock(shared.accessData)
-		shared.turniket.signal()
-		
-		# prístup k údajom simulovaný nasledovným výpisom
-		print(f'monit{monitor_id}: pocet_citajucich_monitorov: {pocet_citajucich_monitorov}\n')
-		# aktualizovali sme údaje, odchádzame z úložiska
-		shared.ls_monitor.unlock(shared.accessData)
+    """function which simulates reading from
+    2 monitors with delay of 500 ms
+
+    :param shared: shared object
+    :param monitor_id: id of current monitor
+    :return: None
+    """
+    shared.valid_data.wait()
+    while True:
+        sleep(0.5)
+
+        shared.turniket.wait()
+        number_of_reading_monitors = shared.ls_monitor.lock(shared.access_data)
+        shared.turniket.signal()
+
+        print(f'monit{monitor_id}: '
+              f'number_of_reading_monitors: {number_of_reading_monitors}\n')
+        shared.ls_monitor.unlock(shared.access_data)
 
 
-def cidlo(shared, cidlo_id):
-	while True:
-		# čidlá prechádzajú cez turniket, pokým ho nezamkne monitor
-		shared.turniket.wait()
-		shared.turniket.signal()
-		
-		# získame prístup k úložisku
-		pocet_zapisujucich_cidiel = shared.ls_cidlo.lock(shared.accessData)
-		# prístup k údajom simulovaný čakaním v intervale 10 až 15 ms
-		# podľa špecifikácie zadania informujeme o čidle a zápise, ktorý ide vykonať
-		# trvanie_zapisu = rand(10 az 15 ms)
-		trvanie_zapisu = randint(10, 15) / 1000
-		print(f'cidlo {cidlo_id}:  pocet_zapisujucich_cidiel: {pocet_zapisujucich_cidiel}, trvanie_zapisu: {trvanie_zapisu}\n')
-		sleep(trvanie_zapisu)
-		# po zapísaní údajov signalizujeme, že údaj je platný
-		shared.validData.signal()
-		# a odchádzame z úložiska preč
-		shared.ls_cidlo.unlock(shared.accessData)
-		
-		
+def sensor(shared, sensor_id):
+    """function which represents writing by 10 sensors
+    each write takes 10-15ms
+
+    :param shared: shared object
+    :param sensor_id: if of current sensor
+    :return: None
+    """
+    while True:
+        shared.turniket.wait()
+        shared.turniket.signal()
+
+        number_of_writing_sensors = shared.ls_sensor.lock(shared.access_data)
+
+        write_duration = randint(10, 15) / 1000
+        print(
+            f'sensor {sensor_id}: '
+            f'number_of_writing_sensors: {number_of_writing_sensors} '
+            f'write_duration: {write_duration}\n')
+        sleep(write_duration)
+
+        shared.valid_data.signal()
+        shared.ls_sensor.unlock(shared.access_data)
+
+
 def main():
-	shared = Shared()
-	monitors = [Thread(monitor, shared, m) for m in range(2)]
-	sensors = [Thread(cidlo, shared, s) for s in range(10)]
-	for thread in monitors + sensors: thread.join()
-	
+    """main function which creates 2 threads for monitors
+    and 10 threads for sensors
+
+    :return: None
+    """
+    shared = Shared()
+    monitors = [Thread(monitor, shared, m) for m in range(2)]
+    sensors = [Thread(sensor, shared, s) for s in range(10)]
+    for thread in monitors + sensors:
+        thread.join()
+
 
 if __name__ == '__main__':
-	main()
+    main()
