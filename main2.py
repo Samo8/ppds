@@ -49,7 +49,7 @@ class Shared:
 
     def __init__(self):
         self.access_data = Semaphore(1)
-        self.turniket = Semaphore(1)
+        self.turnstile = Semaphore(1)
         self.ls_monitor = LS()
         self.ls_sensor = LS()
         self.valid_data = Event()
@@ -68,9 +68,9 @@ def monitor(shared, monitor_id):
         read_duration = randint(40, 50) / 1000
         sleep(read_duration)
 
-        shared.turniket.wait()
+        shared.turnstile.wait()
         number_of_reading_monitors = shared.ls_monitor.lock(shared.access_data)
-        shared.turniket.signal()
+        shared.turnstile.signal()
         print(
             f'monitor{monitor_id}: '
             f'number_of_reading_monitors: {number_of_reading_monitors} '
@@ -91,9 +91,9 @@ def sensor(shared, sensor_id):
         sleep_time = randint(50, 60) / 1000
         sleep(sleep_time)
 
-        shared.turniket.wait()
+        shared.turnstile.wait()
         number_of_writing_sensors = shared.ls_sensor.lock(shared.access_data)
-        shared.turniket.signal()
+        shared.turnstile.signal()
 
         if sensor_id == 2:
             write_duration = randint(20, 25) / 1000
