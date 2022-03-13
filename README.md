@@ -20,6 +20,8 @@ LS, semaphore in LS could be taken by LS in monitors. Also in our implementation
 2 categories of objects (sensors, monitors) to work properly. There is always one category which has and advantage,
 because there is no possibility to make both categories "same".
 Current number of reading monitors is take from lock() function in LS object. there we return current counter value.
+This type of task is very similar to producer-consumer problem or reader-writer problem. Sensors represent
+writer and monitors reader.
 
 Pseudo code:
 
