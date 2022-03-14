@@ -27,7 +27,7 @@ class LS(object):
         self.cnt += 1
         if self.cnt == 1:
             sem.wait()
-            self.mutex.unlock()
+        self.mutex.unlock()
         return self.cnt
 
     def unlock(self, sem):
