@@ -48,7 +48,7 @@ class Shared(object):
         self.mutex = Mutex()
         self.empty_pot = Event()
         self.full_pot = Semaphore(0)
-        self.b1_cook = SimpleBarrier(cooks_number)
+        self.b_cook = SimpleBarrier(cooks_number)
 
 
 def eat(i):
@@ -100,7 +100,7 @@ def cook(i, shared):
         sleep(50 / 1000)
         print(f'cook: {i} servings --> pot')
 
-        shared.b1_cook.wait(shared)
+        shared.b_cook.wait(shared)
 
 
 def main():
