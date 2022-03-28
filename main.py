@@ -67,6 +67,7 @@ def customer(shared, i):
             continue
 
         shared.customers += 1
+        print(f'Customer {i} got to the barbershop, there are {N - shared.customers} places left')
         barber_of_customer = Semaphore(0)
         shared.queue.append(barber_of_customer)
         shared.mutex.unlock()
@@ -86,9 +87,7 @@ def customer(shared, i):
 
 
 def grow_hair(i):
-    """function representing growing of hair
-    function give additional time for barber to cut hair,
-    so there are not always customers trying to get into barbershop
+    """function represting growing of hair
 
     :param i: customer id
     :return: None
