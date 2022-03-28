@@ -25,7 +25,7 @@ class Shared:
         self.barber_done = Semaphore(0)
         self.customer_done = Semaphore(0)
         self.mutex = Mutex()
-        self.queue = []
+        self.barbers_queue = []
 
 
 def barber(shared):
@@ -38,7 +38,7 @@ def barber(shared):
     while True:
         shared.customer.wait()
         shared.mutex.lock()
-        barber_of_customer = shared.queue.pop(0)
+        barber_of_customer = shared.barbers_queue.pop(0)
         shared.mutex.unlock()
         barber_of_customer.signal()
 
@@ -53,7 +53,7 @@ def customer(shared, i):
     we could have max N number of customer in barbershop
     customer is getting haircut by barber
 
-    :param shared: sahred object holding necessary data
+    :param shared: shared object holding necessary data
     :param i: customer id
     :return: None
     """
@@ -67,9 +67,10 @@ def customer(shared, i):
             continue
 
         shared.customers += 1
-        print(f'Customer {i} got to the barbershop, there are {N - shared.customers} places left')
+        print(f'Customer {i} got to the barbershop, '
+              f'there are {N - shared.customers} places left')
         barber_of_customer = Semaphore(0)
-        shared.queue.append(barber_of_customer)
+        shared.barbers_queue.append(barber_of_customer)
         shared.mutex.unlock()
 
         shared.customer.signal()
@@ -87,7 +88,7 @@ def customer(shared, i):
 
 
 def grow_hair(i):
-    """function represting growing of hair
+    """function representing growing of hair
 
     :param i: customer id
     :return: None
