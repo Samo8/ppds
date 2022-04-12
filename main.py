@@ -6,25 +6,25 @@ import sys
 
 class Scheduler(object):
     """class representing Scheduler which holds list/queue
-    of coprograms - foo and bar
+    of coroutines - foo and bar
     """
-    def __init__(self, coprograms):
-        self.coprograms = coprograms
+    def __init__(self, coroutines):
+        self.coroutines = coroutines
 
     def run(self):
-        """function run represents running of coprograms
-        we store coprograms in list/queue and get/add them from/to it
+        """function run represents running of coroutines
+        we store coroutines in list/queue and get/add them from/to it
 
         :return: None
         """
         while True:
-            task = self.coprograms.pop(0)
+            task = self.coroutines.pop(0)
             task.send(None)
-            self.coprograms.append(task)
+            self.coroutines.append(task)
 
 
 def main(iteration_number=sys.maxsize):
-    """main function creates two functions (coprograms) foo and bar
+    """main function creates two functions (coroutines) foo and bar
 
     :param iteration_number: represents number of iterations
     if not set, runs infinity
