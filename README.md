@@ -19,10 +19,10 @@ before ```big``` sum, even ```big``` is called first.
 #### Async version takes about ```2.4 seconds``` to compute sums.
 
 #### Sync program output:
-![](../../../../../../var/folders/w0/6dqg01y144b142wmp_plfy8h0000gn/T/TemporaryItems/NSIRD_screencaptureui_W0j6lE/Screenshot 2022-04-19 at 09.25.22.png)
+![Sync result](./sync_result.png)
 
 #### Async program output:
-![](../../../../../../var/folders/w0/6dqg01y144b142wmp_plfy8h0000gn/T/TemporaryItems/NSIRD_screencaptureui_BtMrRF/Screenshot 2022-04-19 at 09.25.57.png)
+![Async result](./async_result.png)
 
 In sync program we can see that next sum computation is called after result of previous is returned. In async program 
 all the sums are called and result is being computed in async way. Medium sum is being computed before big sum, which 
