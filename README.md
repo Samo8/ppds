@@ -1,16 +1,9 @@
 # ppds
-Repository to subject ppds
 
-[Assignment 01](https://github.com/Samo8/ppds/tree/01)
+## Ninth assignment focused on cuda programming
 
-[Assignment 02](https://github.com/Samo8/ppds/tree/02)
+In this assignment we should demonstrate use of Cuda device.
 
-[Assignment 03](https://github.com/Samo8/ppds/tree/03)
-
-[Assignment 04](https://github.com/Samo8/ppds/tree/04)
-
-[Assignment 05](https://github.com/Samo8/ppds/tree/05)
-
-[Assignment 06](https://github.com/Samo8/ppds/tree/06)
-
-[Assignment 07](https://github.com/Samo8/ppds/tree/07)
+In ```main.py``` file we have simple program which computes sums of lists. We generate ```256``` lists of numbers 
+which contains numbers from ```1``` to ```random(8000, 10 000)```. We have ```8``` threads per block and ```32``` blocks. 
+Results are saved in ```results``` list. After computing sums of list we print results to console. 

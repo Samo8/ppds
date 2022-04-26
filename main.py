@@ -10,7 +10,6 @@ import random
 @cuda.jit
 def compute_sum(numbers, results):
     """function which computes sums of lists from numbers list
-    on cuda device
 
     :param numbers: list of list for which we compute sums
     :param results: result list containing sums
