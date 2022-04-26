@@ -14,3 +14,7 @@ Repository to subject ppds
 [Assignment 06](https://github.com/Samo8/ppds/tree/06)
 
 [Assignment 07](https://github.com/Samo8/ppds/tree/07)
+
+[Assignment 08](https://github.com/Samo8/ppds/tree/08)
+
+[Assignment 09](https://github.com/Samo8/ppds/tree/09)
