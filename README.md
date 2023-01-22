@@ -1,5 +1,5 @@
 # ppds
-Repository to subject ppds
+Repository for Paralel programming and distributed systems course taught at the Faculty of Electrical Engineering and Information Technology of STU in Bratislava.
 
 [Assignment 01](https://github.com/Samo8/ppds/tree/01)
 
